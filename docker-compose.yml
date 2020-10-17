@@ -1,0 +1,41 @@
+version: "2.4"
+services:
+  versioner-java:
+    container_name: versioner-java
+    image: walfud/dockers:openjdk11_gradle6.6.1
+    working_dir: /versioner
+    command: sh -c 'chmod +x ./gradlew && ./gradlew clean build bootRun'
+    restart: always
+    volumes:
+      - .:/versioner
+    ports:
+      - 10000:8080
+      - 10001:5005
+    depends_on:
+      - versioner-mysql
+    logging:
+      options:
+        max-size: 1g
+    cpus: 0.75
+    mem_limit: 1g
+    memswap_limit: 4g
+
+  versioner-mysql:
+    container_name: versioner-mysql
+    image: mysql:8.0
+    restart: always
+    env_file: .env
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d:ro
+      - ./mysql/my.cnf:/etc/mysql/my.cnf:ro
+      - ./mysql/reset.sql:/docker-entrypoint-initdb.d/reset.sql:ro
+      - ./data/versioner-mysql:/var/lib/mysql
+    ports:
+      - 10010:3306
+      - 10011:33060
+    logging:
+      options:
+        max-size: "100m"
+    cpus: 0.5
+    mem_limit: 1g
+    memswap_limit: 4g

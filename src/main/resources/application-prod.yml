@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://versioner-mysql:3306/versioner
+    username: versioner
+    password: versioner
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true

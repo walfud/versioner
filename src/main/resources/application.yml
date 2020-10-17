@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: prod
+  application:
+    name: versioner
+
+server:
+  port: 8080
+  compression:
+    enabled: true
