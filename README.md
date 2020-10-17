@@ -24,7 +24,9 @@ Can be composition of _major_ or _minor_ or _patch_ or _build_, joined by _._(do
 Each part can be fixed length by "_part_-N".
 
 Common usage:
+
 | format | description | return | 
+| :--- | :--- | :--- |
 | _major.minor.patch_ | return sematic version | 1.2.3 |
 | _major.minor.patch.build_ | return sematic version with patch number | 1.2.3.4 | 
 | _major.minor.patch-3_ | patch part with fixed length | 1.2.3.004 |
