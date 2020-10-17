@@ -1,7 +1,19 @@
 # Usage
+
+##### Increase patch number
+```shell
+curl -X POST localhost:8080/version -H "Content-Type: application/json" -d '{"id": "com.walfud.foo", "current": "1.2.3", "part": "patch", "ret": "major.minor.patch"}'
+```
+> "1.2.3" or "1.2.4" or until a patch number not taken up by others
+
+##### Increase build number (Usually by CI)
 ```shell
 curl -X POST localhost:8080/version -H "Content-Type: application/json" -d '{"id": "com.walfud.foo", "current": "1.2.3", "part": "build", "ret": "major.minor.patch.build-3"}'
+
+# or
+curl -X POST localhost:8080/version -H "Content-Type: application/json" -d '{"id": "com.walfud.foo", "current": "1.2.3.0", "part": "build", "ret": "major.minor.patch.build-3"}'
 ```
+> "1.2.3.000" or "1.2.3.001" or until a build number not taken up by others
 
 ### Parameter
 
@@ -34,20 +46,11 @@ Common usage:
 
 # Rule
 
-
 ### Return new version or your version?
-a. If the version does **NOT EXIST**, your expected version is return, for example:
-```shell
-curl -X POST localhost:8080/version -H "Content-Type: application/json" -d '{"id": "com.walfud.foo", "part": "build", "ret": "major.minor.patch.build-3", "current": "1.2.3"}'
-```
-> 1.2.3
+a. If the version does **NOT EXIST**, your expected version is return.
 
-b. If the version does **EXIST**, a new version with increased part is return, for example:
-```shell
-curl -X POST localhost:8080/version -H "Content-Type: application/json" -d '{"id": "com.walfud.foo", "part": "build", "ret": "major.minor.patch.build-3", "current": "1.2.3"}'
-```
-> 1.2.4
->
+b. If the version does **EXIST**, a new version with increased part is return
+
 
 # Install & Deploy
 **_docker_ and _docker-compose_ is required**.
