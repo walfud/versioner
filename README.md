@@ -41,7 +41,7 @@ Common usage:
 | :--- | :--- | :--- |
 | _major.minor.patch_ | return sematic version | 1.2.3 |
 | _major.minor.patch.build_ | return sematic version with patch number | 1.2.3.4 | 
-| _major.minor.patch-3_ | patch part with fixed length | 1.2.3.004 |
+| _major.minor.patch.build-3_ | build part with fixed length | 1.2.3.004 |
 
 
 # Rule
