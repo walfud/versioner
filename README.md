@@ -45,11 +45,10 @@ Common usage:
 
 
 # Rule
-
-### Return new version or your version?
-a. If the version does **NOT EXIST**, your expected version is return.
-
-b. If the version does **EXIST**, a new version with increased part is return
+* Minimum build number is 1, other is 0. That means the minimum _major.minor.patch_ is "0.0.0", while _major.minor.patch.build_ is "0.0.0.1". 
+* Return new version or your version? <br />
+  a. If the version does **NOT EXIST**, your expected version is return. <br />
+  b. If the version does **EXIST**, a new version with increased part is return.
 
 
 # Install & Deploy
