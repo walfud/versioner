@@ -37,6 +37,6 @@ data class DbApp(
 
         var value: Int,
 
-        var createTime: Timestamp,
-        var updateTime: Timestamp,
+        var createTime: Timestamp? = null,
+        var updateTime: Timestamp? = null,
 )

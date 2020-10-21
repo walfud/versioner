@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.Transactional
 import kotlin.math.max
 
 @Service
-class VersionService {
-    @Autowired
-    lateinit var versionMapper: VersionMapper
+class VersionService @Autowired constructor(
+        val versionMapper: VersionMapper
+) {
 
     /**
      * @return new value
@@ -39,7 +39,7 @@ abstract class PartAdapter {
     val patch: Int
     val build: Int
 
-    constructor(ver: String, part: String) {
+    constructor(ver: String) {
         val parts = ver.split(".").map { it.toInt() }
         major = if (parts.size > 0) parts[0] else 0
         minor = if (parts.size > 1) parts[1] else 0
@@ -59,37 +59,94 @@ abstract class PartAdapter {
     abstract fun fork(newValue: Int): PartAdapter
 
     open fun getMinValue(): Int = 0
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is PartAdapter) return false
+        if (major != other.major
+                || minor != other.minor
+                || patch != other.patch
+                || build != other.build) {
+            return false
+        }
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = 1
+        result = 31 * result + major
+        result = 31 * result + minor
+        result = 31 * result + patch
+        result = 31 * result + build
+        return result
+    }
 }
 
 class MajorPart : PartAdapter {
-    constructor(ver: String, part: String) : super(ver, part)
+    constructor(ver: String) : super(ver)
     private constructor(major: Int, minor: Int, patch: Int, build: Int) : super(major, minor, patch, build)
 
     override fun getBase() = ".$minor.$patch.$build"
     override fun getValue() = major
     override fun fork(newValue: Int): PartAdapter = MajorPart(newValue, minor, patch, build)
+
+    override fun equals(other: Any?): Boolean {
+        return other is MajorPart && super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        var result = major
+        result = 31 * result + minor
+        result = 31 * result + patch
+        result = 31 * result + build
+        return result
+    }
 }
 
 class MinorPart : PartAdapter {
-    constructor(ver: String, part: String) : super(ver, part)
+    constructor(ver: String) : super(ver)
     private constructor(major: Int, minor: Int, patch: Int, build: Int) : super(major, minor, patch, build)
 
     override fun getBase() = "$major..$patch.$build"
     override fun getValue() = minor
     override fun fork(newValue: Int): PartAdapter = MinorPart(major, newValue, patch, build)
+
+    override fun equals(other: Any?): Boolean {
+        return other is MinorPart && super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        var result = minor
+        result = 31 * result + major
+        result = 31 * result + patch
+        result = 31 * result + build
+        return result
+    }
 }
 
 class PatchPart : PartAdapter {
-    constructor(ver: String, part: String) : super(ver, part)
+    constructor(ver: String) : super(ver)
     private constructor(major: Int, minor: Int, patch: Int, build: Int) : super(major, minor, patch, build)
 
     override fun getBase() = "$major.$minor..$build"
     override fun getValue() = patch
     override fun fork(newValue: Int): PartAdapter = PatchPart(major, minor, newValue, build)
+
+    override fun equals(other: Any?): Boolean {
+        return other is PatchPart && super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        var result = patch
+        result = 31 * result + major
+        result = 31 * result + minor
+        result = 31 * result + build
+        return result
+    }
 }
 
 class BuildPart : PartAdapter {
-    constructor(ver: String, part: String) : super(ver, part)
+    constructor(ver: String) : super(ver)
     private constructor(major: Int, minor: Int, patch: Int, build: Int) : super(major, minor, patch, build)
 
     override fun getBase() = "$major.$minor.$patch."
@@ -97,4 +154,16 @@ class BuildPart : PartAdapter {
     override fun fork(newValue: Int): PartAdapter = BuildPart(major, minor, patch, newValue)
 
     override fun getMinValue(): Int = 1
+
+    override fun equals(other: Any?): Boolean {
+        return other is BuildPart && super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        var result = build
+        result = 31 * result + major
+        result = 31 * result + minor
+        result = 31 * result + patch
+        return result
+    }
 }

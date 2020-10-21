@@ -6,18 +6,17 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class VersionController {
-
-    @Autowired
-    lateinit var versionService: VersionService
+class VersionController @Autowired constructor(
+        val versionService: VersionService
+) {
 
     @PostMapping("/version")
     fun gen(@RequestBody body: VersionRequest): String {
         val partAdapter: PartAdapter = when (body.part) {
-            "major" -> MajorPart(body.current, body.part)
-            "minor" -> MinorPart(body.current, body.part)
-            "patch" -> PatchPart(body.current, body.part)
-            "build" -> BuildPart(body.current, body.part)
+            "major" -> MajorPart(body.current)
+            "minor" -> MinorPart(body.current)
+            "patch" -> PatchPart(body.current)
+            "build" -> BuildPart(body.current)
             else -> throw RuntimeException("`inc` must be [major|minor|patch|build]")
         }
 
