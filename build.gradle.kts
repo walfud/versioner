@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.walfud"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
@@ -23,6 +23,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
+    implementation("org.springdoc:springdoc-openapi-ui:1.4.8")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.4.8")
 
     implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3")
     runtimeOnly("mysql:mysql-connector-java")

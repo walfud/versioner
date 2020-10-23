@@ -1,5 +1,6 @@
 package com.walfud.versioner.version
 
+import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -10,7 +11,11 @@ class VersionController @Autowired constructor(
         val versionService: VersionService
 ) {
 
-    @PostMapping("/version")
+    @PostMapping(
+            value = ["/version"],
+            consumes = ["application/json"],
+            produces = ["text/plain;charset=utf-8"]
+    )
     fun gen(@RequestBody body: VersionRequest): String {
         val partAdapter: PartAdapter = when (body.part) {
             "major" -> MajorPart(body.current)
@@ -44,9 +49,14 @@ class VersionController @Autowired constructor(
 
 }
 
+@Schema
 data class VersionRequest(
-        val id: String,         // xxxx
-        val current: String,    // 1.3.4.0
-        val part: String,       // major/minor/patch/build
-        val ret: String         // major.minor.patch.build
+        @Schema(required = true, example = "com.walfud.versioner")
+        val id: String,
+        @Schema(required = true, example = "1.3.4.0")
+        val current: String,
+        @Schema(required = true, example = "build", allowableValues = ["major", "minor", "patch", "build"])
+        val part: String,
+        @Schema(required = true, example = "major.minor.patch.build")
+        val ret: String,
 )
