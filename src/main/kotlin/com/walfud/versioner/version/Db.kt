@@ -11,6 +11,13 @@ interface VersionMapper {
     @Select("""
         SELECT *
         FROM `version`
+        LIMIT 1
+    """)
+    fun queryAnyOne(): DbApp?
+
+    @Select("""
+        SELECT *
+        FROM `version`
         WHERE id = #{id}
     """)
     fun queryById(id: String): DbApp?
