@@ -1,6 +1,7 @@
 package com.walfud.versioner.version
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.swagger.v3.oas.annotations.media.Schema
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,7 +28,7 @@ class VersionController @Autowired constructor(
             "build" -> BuildPart(body.current)
             else -> throw RuntimeException("`inc` must be [major|minor|patch|build]")
         }
-        logger.debug("gen <<<: ${ObjectMapper().writeValueAsString(body)}")
+        logger.debug("gen <<<: ${jacksonObjectMapper().writeValueAsString(body)}")
 
         val newValue = versionService.inc(body.id, partAdapter)
 
