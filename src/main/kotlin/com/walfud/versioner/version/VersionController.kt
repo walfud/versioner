@@ -1,6 +1,8 @@
 package com.walfud.versioner.version
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.swagger.v3.oas.annotations.media.Schema
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 class VersionController @Autowired constructor(
         val versionService: VersionService
 ) {
+    private val logger = LoggerFactory.getLogger(VersionController::class.java)
 
     @PostMapping(
             value = ["/version"],
@@ -24,11 +27,12 @@ class VersionController @Autowired constructor(
             "build" -> BuildPart(body.current)
             else -> throw RuntimeException("`inc` must be [major|minor|patch|build]")
         }
+        logger.debug("gen <<<: ${ObjectMapper().writeValueAsString(body)}")
 
         val newValue = versionService.inc(body.id, partAdapter)
 
         val newPartAdapter = partAdapter.fork(newValue)
-        return body.ret
+        val ret = body.ret
                 .split(".")
                 .map { it ->
                     val nameAndLen = it.split("-")
@@ -44,7 +48,11 @@ class VersionController @Autowired constructor(
                     }
                             .toString()
                             .padStart(len, '0')
-                }.joinToString(".")
+                }
+                .joinToString(".")
+
+        logger.debug("gen >>>: $ret")
+        return ret
     }
 
 }
