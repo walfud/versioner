@@ -67,4 +67,4 @@ server listening on _10000_, mysql listening on _10010_ and _10011_(debug)
 
 
 # TODO
-* Unit Test
+* actuator & doc
